@@ -7,14 +7,44 @@ class Register extends React.Component {
     username: '',
     email: '',
     password: '',
-    passwordConfirmation: ''
+    passwordConfirmation: '',
+    errors: []
   }
 
   handleChange = (e) => this.setState({[e.target.name]: e.target.value});
 
   isFormValid = () => {
-    
+    let errors = [];
+    let error;
+
+    if (this.isFormEmpty(this.state)) {
+      error = {message: 'Fill in all the fields!'};
+      this.setState({errors: errors.concat(error)});
+      return false;
+    } else if (!this.isPasswordValid(this.state)) {
+      error = {message: 'Password is invalid.'};
+      this.setState({errors: errors.concat(error)});
+      return false;
+    } else {
+      return true;
+    }
   }
+
+  isFormEmpty = ({username, email, password, passwordConfirmation}) => {
+    return !username.length || !email.length || !password.length || !passwordConfirmation.length;
+  }
+
+  isPasswordValid = ({password, confirmPassword}) => {
+    if (password.length < 6 || confirmPassword.length < 6) {
+      return false;
+    } else if (password === confirmPassword) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  displayErrors = errors => errors.map((error, i) => <p key={i}>{error.message}</p>)
 
   handleSubmit = (e) => {
     if (this.isFormValid()) {
@@ -30,7 +60,7 @@ class Register extends React.Component {
   }
 
   render () {
-    const {username, email, password, passwordConfirmation} = this.state;
+    const {username, email, password, passwordConfirmation, errors} = this.state;
     return(
       <Grid textAlign='center' verticalAlign='middle' className='app'>
         <Grid.Column style={{maxWidth:450}}>
@@ -47,6 +77,12 @@ class Register extends React.Component {
               <Button color='orange' fluid size='large'>Submit</Button>
             </Segment>
           </Form>
+          {errors.length > 0 && (
+            <Message error>
+              <h3>Error</h3>
+              {this.displayErrors(errors)}
+            </Message>
+          )}
           <Message>Already a user? <Link to='/login'>Login</Link></Message>
         </Grid.Column>
       </Grid>
