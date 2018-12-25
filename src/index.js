@@ -11,12 +11,14 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import store from './store';
 import {setUser} from './actions';
+import Spinner from './Spinner';
 
 class Root extends React.Component {
   componentDidMount() {
+    console.log(this.props.isLoading)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log(user)
+        // console.log(user)
         //use redux for this
         this.props.setUser(user);
         //we are redirecting because '/' is where our chat will be
@@ -25,7 +27,7 @@ class Root extends React.Component {
     })
   }
   render() {
-    return (
+    return this.props.isLoading ?  <Spinner /> : (
         <Switch>
           <Route exact path='/' component={App} />
           <Route path='/login' component={Login} />
@@ -35,7 +37,13 @@ class Root extends React.Component {
   }
 }
 
-const RootWithAuth = withRouter(connect(null, {setUser})(Root));
+const mapStateToProps = state => {
+  return {
+    isLoading: state.user.isLoading
+  }
+}
+
+const RootWithAuth = withRouter(connect(mapStateToProps, {setUser})(Root));
 
 ReactDOM.render(
   <Provider store={store}>
