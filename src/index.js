@@ -1,18 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter as Router, Switch, Route, withRouter} from 'react-router-dom';
+import {Provider, connect} from 'react-redux';
+import firebase from './firebase';
 import 'semantic-ui-css/semantic.min.css'
+import registerServiceWorker from './registerServiceWorker';
+
 import App from './components/App';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import registerServiceWorker from './registerServiceWorker';
-import firebase from './firebase';
-
-import {BrowserRouter as Router, Switch, Route, withRouter} from 'react-router-dom';
+import store from './store';
+import {setUser} from './actions';
 
 class Root extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        console.log(user)
+        //use redux for this
+        this.props.setUser(user);
+        //we are redirecting because '/' is where our chat will be
         this.props.history.push('/');
       }
     })
@@ -28,7 +35,13 @@ class Root extends React.Component {
   }
 }
 
-const RootWithAuth = withRouter(Root);
+const RootWithAuth = withRouter(connect(null, {setUser})(Root));
 
-ReactDOM.render(<Router><RootWithAuth /></Router>, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <Router>
+      <RootWithAuth />
+    </Router>
+  </Provider>,
+  document.getElementById('root'));
 registerServiceWorker();
