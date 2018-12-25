@@ -1,0 +1,6 @@
+html, body, .app {
+  height: 100vh;
+  height: 100%;
+  background: #eee;
+  padding: 1em;
+}
