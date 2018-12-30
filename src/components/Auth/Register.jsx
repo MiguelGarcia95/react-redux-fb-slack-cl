@@ -12,7 +12,6 @@ class Register extends React.Component {
     passwordConfirmation: '',
     errors: [],
     loading: false,
-    // usersRef: firestore.collection('users')
     usersRef: firebase.database().ref('users')
   }
 
