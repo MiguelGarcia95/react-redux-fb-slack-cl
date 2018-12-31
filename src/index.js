@@ -10,7 +10,7 @@ import App from './components/App';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import store from './store';
-import {setUser} from './actions';
+import {setUser, clearUser} from './actions';
 import Spinner from './Spinner';
 
 class Root extends React.Component {
@@ -19,10 +19,13 @@ class Root extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // console.log(user)
-        //use redux for this
         this.props.setUser(user);
         //we are redirecting because '/' is where our chat will be
         this.props.history.push('/');
+      } else {
+        this.props.history.push('/login');
+        //this should be in signOut action
+        this.props.clearUser();
       }
     })
   }
@@ -43,7 +46,7 @@ const mapStateToProps = state => {
   }
 }
 
-const RootWithAuth = withRouter(connect(mapStateToProps, {setUser})(Root));
+const RootWithAuth = withRouter(connect(mapStateToProps, {setUser, clearUser})(Root));
 
 ReactDOM.render(
   <Provider store={store}>
