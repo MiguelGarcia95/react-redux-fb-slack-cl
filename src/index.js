@@ -15,7 +15,6 @@ import Spinner from './Spinner';
 
 class Root extends React.Component {
   componentDidMount() {
-    console.log(this.props.isLoading)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // console.log(user)
