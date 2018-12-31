@@ -52,7 +52,7 @@ class MessageForm extends React.Component {
   }
 
   render () {
-    const {errors} = this.state;
+    const {errors, message, loading} = this.state;
     return (
       <Segment className='message__form'>
         <Input
@@ -62,6 +62,7 @@ class MessageForm extends React.Component {
           style={{marginBottom: '0.7em'}}
           label={<Button icon={'add'} />}
           labelPosition='left'
+          value={message}
           className={
             errors.some(error => error.message.includes('message')) ? 'error' : ''
           }
@@ -73,6 +74,7 @@ class MessageForm extends React.Component {
             color='orange'
             content='Add Reply'
             labelPosition='left'
+            disabled={loading}
             icon='edit'
           />
           <Button
