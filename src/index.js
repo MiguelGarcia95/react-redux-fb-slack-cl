@@ -23,13 +23,12 @@ class Root extends React.Component {
         this.props.history.push('/');
       } else {
         this.props.history.push('/login');
-        //this should be in signOut action
         this.props.clearUser();
       }
     })
   }
   render() {
-    return this.props.isLoading ?  <Spinner /> : (
+    return this.props.isLoading ? <Spinner /> : (
         <Switch>
           <Route exact path='/' component={App} />
           <Route path='/login' component={Login} />
