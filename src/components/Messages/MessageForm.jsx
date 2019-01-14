@@ -149,16 +149,16 @@ class MessageForm extends React.Component {
             labelPosition='right'
             icon='cloud upload'
           />
-          <FileModal
-            modal={modal}
-            closeModal={this.closeModal}
-            uploadFile={this.uploadFile}
-          />
-          <ProgressBar 
-            uploadState={uploadState}
-            percentUploaded={percentUploaded}
-          />
         </Button.Group>
+        <FileModal
+          modal={modal}
+          closeModal={this.closeModal}
+          uploadFile={this.uploadFile}
+        />
+        <ProgressBar 
+          uploadState={uploadState}
+          percentUploaded={percentUploaded}
+        />
       </Segment>
     )
   }
