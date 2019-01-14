@@ -21,7 +21,7 @@ const Message = ({message, user}) => {
         <Comment.Metadata >{timeFromNow(message.timestamp)}</Comment.Metadata>
         
         {isImage(message) ? 
-          <Image set={message.image} className='message__image'/> : 
+          <Image src={message.image} className='message__image'/> : 
           <Comment.Text>{message.content}</Comment.Text>
         }
       </Comment.Content>
