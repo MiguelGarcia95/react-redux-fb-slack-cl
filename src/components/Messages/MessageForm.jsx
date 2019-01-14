@@ -1,6 +1,7 @@
 import React from 'react';
 import {Segment, Button, Input} from 'semantic-ui-react';
 import firebase from '../../firebase';
+import FileModal from './FileModal';
 
 class MessageForm extends React.Component {
   state = {
