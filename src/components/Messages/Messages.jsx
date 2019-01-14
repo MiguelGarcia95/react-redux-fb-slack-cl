@@ -12,7 +12,8 @@ class Messages extends React.Component {
     user: this.props.currentUser,
     messages: [],
     messagesLoading: true,
-    progressBar: false
+    progressBar: false,
+    numUniqueUsers: ''
   }
 
   componentDidMount() {
@@ -34,7 +35,19 @@ class Messages extends React.Component {
         messages: loadedMessages,
         messagesLoading: false
       })
+      this.countUniqueUsers(loadedMessages)
     });
+  }
+
+  countUniqueUsers = messages => {
+    const uniqueUsers = messages.reduce((acc, message) => {
+      if (!acc.includes(message.user.name)) {
+        acc.push(message.user.name)
+      }
+      return acc;
+    }, []);
+    const numUniqueUsers = `${uniqueUsers.length} users`;
+    this.setState({numUniqueUsers: numUniqueUsers})
   }
 
   displayMessages = messages => {
@@ -49,11 +62,13 @@ class Messages extends React.Component {
     }
   }
 
+  displayChannelName = channel => channel ? `#${channel.name}` : '';
+
   render () {
-    const {messagesRef, channel, user, messages, progressBar} = this.state;
+    const {messagesRef, channel, user, messages, progressBar, numUniqueUsers} = this.state;
     return (
       <React.Fragment>
-        <MessageHeader />
+        <MessageHeader channelName={this.displayChannelName(channel)} users={numUniqueUsers} />
 
         <Segment>
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
