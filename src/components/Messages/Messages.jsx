@@ -88,7 +88,7 @@ class Messages extends React.Component {
   displayChannelName = channel => channel ? `#${channel.name}` : '';
 
   render () {
-    const {messagesRef, channel, user, messages, progressBar, numUniqueUsers} = this.state;
+    const {messagesRef, channel, user, messages, progressBar, numUniqueUsers, searchTerm, searchResults} = this.state;
     return (
       <React.Fragment>
         <MessageHeader 
@@ -99,7 +99,7 @@ class Messages extends React.Component {
 
         <Segment>
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
-            {this.displayMessages(messages)}
+            {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
           </Comment.Group>
         </Segment>
 
