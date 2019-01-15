@@ -10,6 +10,7 @@ class Messages extends React.Component {
     messagesRef: firebase.database().ref('messages'),
     channel: this.props.currentChannel,
     user: this.props.currentUser,
+    privateChannel: this.props.isPrivateChannel,
     messages: [],
     messagesLoading: true,
     progressBar: false,
@@ -86,8 +87,10 @@ class Messages extends React.Component {
       this.setState({progressBar: true})
     }
   }
-
-  displayChannelName = channel => channel ? `#${channel.name}` : '';
+  
+  displayChannelName = channel => {
+    return channel ? `${this.state.privateChannel ? '@' : '#'} ${channel.name}` : '';
+  }
 
   render () {
     const {messagesRef, channel, user, messages, progressBar, numUniqueUsers, searchTerm, 
