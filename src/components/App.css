@@ -2,8 +2,10 @@ html, body, .app {
   height: 100vh;
   height: 100%;
   background: #eee;
-  padding: 1em;
+  padding: 0;
 }
+
+.app {padding: 1rem !important;}
 
 .menu {
   padding-bottom: 2em;
