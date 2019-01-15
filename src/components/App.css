@@ -5,6 +5,10 @@ html, body, .app {
   padding: 1em;
 }
 
+.menu {
+  padding-bottom: 2em;
+}
+
 .messages {
   height: 64vh;
   overflow-y: scroll;
