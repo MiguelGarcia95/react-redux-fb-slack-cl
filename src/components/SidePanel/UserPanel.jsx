@@ -9,7 +9,14 @@ class UserPanel extends React.Component {
     modal: false,
     previewImage: '',
     croppedImage: '',
-    blob: ''
+    uploadCroppedImage: '',
+    blob: '',
+    storageRef: firebase.storage().ref(),
+    userRef: firebase.auth().currentUser,
+    usersRef: firebase.database().ref('users'),
+    metadata: {
+      contentType: 'image/jpeg'
+    }
   }
 
   openModal = () => this.setState({modal: true});
@@ -45,6 +52,37 @@ class UserPanel extends React.Component {
         this.setState({previewImage: reader.result})
       })
     }
+  }
+
+  uploadCroppedImage = () => {
+    const {storageRef, userRef, blob, metadata} = this.state;
+    storageRef.child(`avatar/user-${userRef.uid}`)
+      .put(blob, metadata).then(snap => {
+        snap.ref.getDownloadURL().then(downloadURL => {
+          this.setState({uploadCroppedImage: downloadURL}, () => {
+            this.changeAvatar()
+          })
+        })
+      })
+  }
+
+  changeAvatar = () => {
+    this.state.userRef.updateProfile({
+      photoURL: this.state.uploadCroppedImage
+    }).then(() => {
+      console.log('PhotoURL updated')
+      this.closeModal();
+    }).catch(err => {
+      console.error(err);
+    })
+
+    this.state.usersRef.child(this.state.user.uid)
+      .update({avatar: this.state.uploadCroppedImage})
+      .then(() => {
+        console.log('User Avatar updated')
+      }).catch(err => {
+        console.log(err)
+      })
   }
 
   handleCropImage = () => {
@@ -125,7 +163,7 @@ class UserPanel extends React.Component {
             </Modal.Content>
             <Modal.Actions>
               {croppedImage && (
-                <Button color='green' inverted><Icon name='save' /> Change Avatar </Button>
+                <Button onClick={this.uploadCroppedImage} color='green' inverted><Icon name='save' /> Change Avatar </Button>
               )}
               <Button onClick={this.handleCropImage} color='green' inverted><Icon name='image' /> Preview </Button>
               <Button onClick={this.closeModal} color='red' inverted><Icon name='remove' /> Cancel </Button>
