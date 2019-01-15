@@ -140,10 +140,8 @@ class Channels extends React.Component {
 
   areThereNotifications = (channel) => {
     if (this.getNotifcationCount(channel) > 0) {
-      console.log('true')
       return true
     } else {
-      console.log('false')
       return false
     }
   }

@@ -9,6 +9,7 @@ class Messages extends React.Component {
   state = {
     messagesRef: firebase.database().ref('messages'),
     channel: this.props.currentChannel,
+    isChannelStarred: false,
     user: this.props.currentUser,
     privateChannel: this.props.isPrivateChannel,
     privateMessagesRef: firebase.database().ref('privateMessages'),
@@ -89,6 +90,20 @@ class Messages extends React.Component {
     ));
   }
 
+  handleStar = () => {
+    this.setState(prevState => ({
+      isChannelStarred: !prevState.isChannelStarred
+    }), () => this.starChannel());
+  }
+
+  starChannel = () => {
+    if (this.state.isChannelStarred) {
+      console.log('star')
+    } else {
+      console.log('unstar')
+    }
+  }
+
   isProgressBarVisible = percent => {
     if (percent > 0) {
       this.setState({progressBar: true})
@@ -101,7 +116,7 @@ class Messages extends React.Component {
 
   render () {
     const {messagesRef, channel, user, messages, progressBar, numUniqueUsers, searchTerm, 
-      searchResults, searchLoading, privateChannel} = this.state;
+      searchResults, searchLoading, privateChannel, isChannelStarred} = this.state;
     return (
       <React.Fragment>
         <MessageHeader 
@@ -110,6 +125,7 @@ class Messages extends React.Component {
         users={numUniqueUsers} 
         searchLoading={searchLoading}
         isPrivateChannel={privateChannel}
+        handleStar={this.handleStar}
         />
 
         <Segment>
