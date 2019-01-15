@@ -1,12 +1,35 @@
 import React from 'react';
 import {Sidebar, Menu, Divider, Button, Modal, Icon, Label, Segment} from 'semantic-ui-react';
 import {SliderPicker} from 'react-color';
+import firebase from '../../firebase';
 
 class ColorPanel extends React.Component {
   state = {
     modal: false,
     primary: '',
-    secondary: ''
+    secondary: '',
+    user: this.props.currentUser,
+    usersRef: firebase.database().ref('users')
+  }
+
+  handleSaveColors = () => {
+    if (this.state.primary && this.state.secondary) {
+      this.saveColors(this.state.primary, this.state.secondary)
+    }
+  }
+
+  saveColors = (primary, secondary) => {
+    this.state.usersRef
+      .child(`${this.state.user.uid}/colors`)
+      .push()
+      .update({
+        primary: primary, 
+        secondary: secondary
+      })
+      .then(() => {
+        console.log('colors added');
+        this.closeModal();
+      }).catch(err => console.error(err));
   }
 
   openModal = () => this.setState({modal: true})
@@ -44,7 +67,7 @@ class ColorPanel extends React.Component {
             </Segment>
           </Modal.Content>
           <Modal.Actions>
-            <Button color='green' inverted><Icon name='checkmark' /> Save Colors</Button>
+            <Button onClick={this.handleSaveColors} color='green' inverted><Icon name='checkmark' /> Save Colors</Button>
             <Button onClick={this.closeModal} color='red' inverted><Icon name='remove' /> Cancel</Button>
           </Modal.Actions>
         </Modal>
