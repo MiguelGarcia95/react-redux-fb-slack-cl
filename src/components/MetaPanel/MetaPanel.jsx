@@ -23,12 +23,12 @@ class MetaPanel extends React.Component {
             <Image avatar src={val.avatar} />
             <List.Content>
               <List.Header as='a'>{key}</List.Header>
-              <List.Description>{val.count}</List.Description>
+              <List.Description>{val.count} {val.count > 1 ? 'Posts' : 'Post'}</List.Description>
             </List.Content>
           </List.Item>
         )
       })
-    )
+    ).slice(0,5)
   }
 
   render () {
