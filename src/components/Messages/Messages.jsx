@@ -13,7 +13,9 @@ class Messages extends React.Component {
     messages: [],
     messagesLoading: true,
     progressBar: false,
-    numUniqueUsers: ''
+    numUniqueUsers: '',
+    searchTerm: '',
+    searchLoading: false
   }
 
   componentDidMount() {
@@ -36,6 +38,13 @@ class Messages extends React.Component {
         messagesLoading: false
       })
       this.countUniqueUsers(loadedMessages)
+    });
+  }
+
+  handleSearchChange = e => {
+    this.setState({
+      searchTerm: e.target.value,
+      searchLoading: true
     });
   }
 
@@ -69,7 +78,11 @@ class Messages extends React.Component {
     const {messagesRef, channel, user, messages, progressBar, numUniqueUsers} = this.state;
     return (
       <React.Fragment>
-        <MessageHeader channelName={this.displayChannelName(channel)} users={numUniqueUsers} />
+        <MessageHeader 
+        channelName={this.displayChannelName(channel)} 
+        handleSearchChange={this.handleSearchChange}
+        users={numUniqueUsers} 
+        />
 
         <Segment>
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
