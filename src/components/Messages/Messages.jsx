@@ -15,7 +15,8 @@ class Messages extends React.Component {
     progressBar: false,
     numUniqueUsers: '',
     searchTerm: '',
-    searchLoading: false
+    searchLoading: false,
+    searchResults: []
   }
 
   componentDidMount() {
@@ -45,7 +46,19 @@ class Messages extends React.Component {
     this.setState({
       searchTerm: e.target.value,
       searchLoading: true
-    });
+    }, () => this.handleSearchMessages());
+  }
+
+  handleSearchMessages = () => {
+    const channelMessages = [...this.state.messages];
+    const regex = new RegExp(this.state.searchTerm, 'gi');
+    const searchResults = channelMessages.reduce((acc, message) => {
+      if (message.content && message.content.match(regex)) {
+        acc.push(message);
+      }
+      return acc;
+    }, []);
+    this.setState({searchResults: searchResults});
   }
 
   countUniqueUsers = messages => {
