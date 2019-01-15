@@ -134,8 +134,18 @@ class Channels extends React.Component {
         count = notification.count;
       }
 
-      if (count > 0) return count;
+      return Number(count);
     })
+  }
+
+  areThereNotifications = (channel) => {
+    if (this.getNotifcationCount(channel) > 0) {
+      console.log('true')
+      return true
+    } else {
+      console.log('false')
+      return false
+    }
   }
 
   displayChannels = channels => {
@@ -147,7 +157,7 @@ class Channels extends React.Component {
         style={{opacity: 0.7}}
         active={channel.id === this.state.activeChannel}
       >
-        {this.getNotifcationCount(channel) && (
+        {this.areThereNotifications(channel) && (
           <Label color='red'>{this.getNotifcationCount(channel)}</Label>
         )}
         # {channel.name}
