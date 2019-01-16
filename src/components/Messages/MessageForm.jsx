@@ -64,12 +64,16 @@ class MessageForm extends React.Component {
 
   sendMessage = () => {
     const {getMessagesRef} = this.props;
-    const {message, channel} = this.state;
+    const {message, channel, typingRef, user} = this.state;
 
     if (message) {
       this.setState({loading: true})
       getMessagesRef().child(channel.id).push().set(this.createMessage()).then(() => {
         this.setState({loading: false, message: '', errors: [] })
+        typingRef
+          .child(channel.id)
+          .child(user.uid)
+          .remove()
       }).catch(err => {
         console.error(err);
         this.setState({
