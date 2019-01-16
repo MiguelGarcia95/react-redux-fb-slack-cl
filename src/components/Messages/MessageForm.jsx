@@ -30,7 +30,10 @@ class MessageForm extends React.Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  handleKeyDown = () => {
+  handleKeyDown = e => {
+    if (e.ctrlKey && e.keyCode === 13) {
+      this.sendMessage()
+    }
     const {message, typingRef, channel, user} = this.state;
 
     if (message) {
