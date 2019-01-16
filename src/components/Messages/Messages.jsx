@@ -5,6 +5,7 @@ import {setUserPosts} from '../../actions';
 import MessageHeader from './MessageHeader';
 import MessageForm from './MessageForm';
 import Message from './Message';
+import Typing from './Typing';
 import firebase from '../../firebase';
 
 class Messages extends React.Component {
@@ -184,6 +185,9 @@ class Messages extends React.Component {
         <Segment>
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
             {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <span className="user__typing">Nana is typing </span>  <Typing />
+            </div>
           </Comment.Group>
         </Segment>
 
