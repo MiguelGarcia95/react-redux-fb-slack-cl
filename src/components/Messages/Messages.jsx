@@ -2,11 +2,13 @@ import React from 'react';
 import {Segment, Comment} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {setUserPosts} from '../../actions';
+import firebase from '../../firebase';
+
 import MessageHeader from './MessageHeader';
 import MessageForm from './MessageForm';
 import Message from './Message';
 import Typing from './Typing';
-import firebase from '../../firebase';
+import Skeleton from './Skeleton';
 
 class Messages extends React.Component {
   state = {
@@ -228,9 +230,20 @@ class Messages extends React.Component {
     }
   }
 
+  displayMessageSkeleton = loading => {
+    return loading ? (
+      <React.Fragment>
+        {[...Array(10)].map((_, i) => <Skeleton key={i} /> )}
+      </React.Fragment>
+    ) : null;
+  }
+
   render () {
-    const {messagesRef, channel, user, messages, progressBar, numUniqueUsers, searchTerm, 
-      searchResults, searchLoading, privateChannel, isChannelStarred, typingUsers} = this.state;
+    const {
+      messagesRef, channel, user, messages, progressBar, numUniqueUsers, searchTerm, 
+      searchResults, searchLoading, privateChannel, isChannelStarred, typingUsers, messagesLoading
+    } = this.state;
+
     return (
       <React.Fragment>
         <MessageHeader 
@@ -245,6 +258,7 @@ class Messages extends React.Component {
 
         <Segment>
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
+            {this.displayMessageSkeleton(messagesLoading)}
             {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
             {this.displayTypingUsers(typingUsers)}
             <div ref={node => this.messagesEnd = node}></div>
