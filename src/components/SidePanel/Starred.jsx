@@ -7,7 +7,7 @@ import {Menu, Icon} from 'semantic-ui-react';
 class Starred extends React.Component {
   state = {
     user: this.props.currentUser,
-    usersref: firebase.database().ref('users'),
+    usersRef: firebase.database().ref('users'),
     activeChannel: '',
     starredChannels: []
   }
@@ -18,8 +18,16 @@ class Starred extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.removeListner();
+  }
+
+  removeListner = () => {
+    this.state.usersRef.child(`${this.state.user.uid}/starred`).off();
+  }
+
   addListeners = (userId) => {
-    this.state.usersref
+    this.state.usersRef
       .child(userId)
       .child('starred')
       .on('child_added', snap => {
@@ -29,7 +37,7 @@ class Starred extends React.Component {
         });
       });
     
-    this.state.usersref
+    this.state.usersRef
       .child(userId)
       .child('starred')
       .on('child_removed', snap => {
