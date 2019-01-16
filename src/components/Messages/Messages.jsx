@@ -37,6 +37,18 @@ class Messages extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.messagesEnd) {
+      //should fix, only scroll when someone is done, not when someone is typing.
+      // this.scrollToBottom();
+      setTimeout(() => this.scrollToBottom(), 1)
+    }
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({behavior: 'smooth'});
+  }
+
   addListeners = channelId => {
     this.addMessageListener(channelId);
     this.addTypingListeners(channelId);
@@ -161,7 +173,7 @@ class Messages extends React.Component {
   displayMessages = messages => {
     return messages.length > 0 && messages.map(message => (
       <Message key={message.timestamp} message={message} user={this.state.user}/>
-    ));
+      ));
   }
 
   handleStar = () => {
@@ -235,6 +247,7 @@ class Messages extends React.Component {
           <Comment.Group className={progressBar ? 'messages__progress' : 'messages'}>
             {searchTerm ? this.displayMessages(searchResults) : this.displayMessages(messages)}
             {this.displayTypingUsers(typingUsers)}
+            <div ref={node => this.messagesEnd = node}></div>
           </Comment.Group>
         </Segment>
 
