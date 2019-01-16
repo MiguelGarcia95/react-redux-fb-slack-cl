@@ -1,6 +1,8 @@
 import React from 'react';
 import uuidv4 from 'uuid/v4';
 import {Segment, Button, Input} from 'semantic-ui-react';
+import {Picker, emojiIndex} from 'emoji-mart';
+import 'emoji-mart/css/emoji-mart.css';
 import firebase from '../../firebase';
 import FileModal from './FileModal';
 import ProgressBar from './ProgressBar';
@@ -17,7 +19,8 @@ class MessageForm extends React.Component {
     typingRef: firebase.database().ref('typing'),
     user: this.props.currentUser,
     errors: [],
-    modal: false
+    modal: false,
+    emojiPicker: false
   }
 
   openModal = () => this.setState({modal: true})
@@ -41,6 +44,10 @@ class MessageForm extends React.Component {
         .child(user.uid)
         .remove()
     }
+  }
+
+  handleTogglePicker = () => {
+    this.setState({emojiPicker: !this.state.emojiPicker})
   }
 
   createMessage = (fileUrl = null) => {
@@ -158,7 +165,7 @@ class MessageForm extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
           style={{marginBottom: '0.7em'}}
-          label={<Button icon={'add'} />}
+          label={<Button icon={'add'} onClick={this.handleTogglePicker} />}
           labelPosition='left'
           value={message}
           className={
