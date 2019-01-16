@@ -54,6 +54,7 @@ class MessageForm extends React.Component {
     const oldMessage = this.state.message;
     const newMessage = this.colonToUnicode(`${oldMessage} ${emoji.colons}`);
     this.setState({message: newMessage, emojiPicker: false});
+    setTimeout(() => this.messageInputRef.focus(), 0)
   }
 
   colonToUnicode = message => {
@@ -194,8 +195,15 @@ class MessageForm extends React.Component {
           name='message'
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
+          ref={node => (this.messageInputRef = node)}
           style={{marginBottom: '0.7em'}}
-          label={<Button icon={'add'} onClick={this.handleTogglePicker} />}
+          label={
+            <Button 
+              icon={emojiPicker ? 'close' : 'add'} 
+              onClick={this.handleTogglePicker} 
+              content={emojiPicker ? 'Close' : null}
+            />
+          }
           labelPosition='left'
           value={message}
           className={
