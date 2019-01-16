@@ -16,7 +16,12 @@
 .env.test.local
 .env.production.local
 .env
+.firebase
 /src/config/apiKeys.js
+.firebaserc
+database.rules.json
+storage.rules
+firebase.json
 
 npm-debug.log*
 yarn-debug.log*
