@@ -14,6 +14,7 @@ class MessageForm extends React.Component {
     percentUploaded: 0,
     channel: this.props.currentChannel,
     storageRef: firebase.storage().ref(),
+    typingRef: firebase.database().ref('typing'),
     user: this.props.currentUser,
     errors: [],
     modal: false
@@ -24,6 +25,22 @@ class MessageForm extends React.Component {
 
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value});
+  }
+
+  handleKeyDown = () => {
+    const {message, typingRef, channel, user} = this.state;
+
+    if (message) {
+      typingRef
+        .child(channel.id)
+        .child(user.uid)
+        .set(user.displayName)
+    } else {
+      typingRef
+        .child(channel.id)
+        .child(user.uid)
+        .remove()
+    }
   }
 
   createMessage = (fileUrl = null) => {
@@ -135,6 +152,7 @@ class MessageForm extends React.Component {
           fluid
           name='message'
           onChange={this.handleChange}
+          onKeyDown={this.handleKeyDown}
           style={{marginBottom: '0.7em'}}
           label={<Button icon={'add'} />}
           labelPosition='left'
