@@ -17,9 +17,7 @@ class Root extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        // console.log(user)
         this.props.setUser(user);
-        //we are redirecting because '/' is where our chat will be
         this.props.history.push('/');
       } else {
         this.props.history.push('/login');
